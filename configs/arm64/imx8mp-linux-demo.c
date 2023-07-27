@@ -11,9 +11,11 @@
  */
 
 /*
- * Boot 2nd Linux cmdline:
- * export PATH=$PATH:/usr/share/jailhouse/tools/
- * jailhouse cell linux imx8mp-linux-demo.cell Image -d imx8mp-evk-inmate.dtb -c "clk_ignore_unused console=ttymxc3,115200 earlycon=ec_imx6q,0x30890000,115200  root=/dev/mmcblk2p2 rootwait rw"
++ * Boot 2nd Linux cmdline with console on J18-3 and J18-5:
++ * 1. Use recovery sd card to program emmc (install_yocto.sh)
++ * 2. Boot from emmc, with recovery sd card inserted
++ * 3. export PATH=$PATH:/usr/share/jailhouse/tools/
++ * 4. jailhouse cell linux /usr/share/jailhouse/cells/imx8mp-linux-demo.cell /boot/Image.gz -d /boot/imx8mp-var-som-inmate.dtb -c 'clk_ignore_unused console=ttymxc2,115200 earlycon=ec_imx6q,0x30a60000,115200 root=/dev/mmcblk1p1 rootwait rw'
  */
 #include <jailhouse/types.h>
 #include <jailhouse/cell-config.h>
@@ -45,14 +47,14 @@ struct {
 	.mem_regions = {
 		/* IVSHMEM shared memory region (virtio-blk front) */
 		{
-			.phys_start = 0xfd900000,
-			.virt_start = 0xfd900000,
+			.phys_start = 0xbd900000,
+			.virt_start = 0xbd900000,
 			.size = 0x1000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
 		},
 		{
-			.phys_start = 0xfd901000,
-			.virt_start = 0xfd901000,
+			.phys_start = 0xbd901000,
+			.virt_start = 0xbd901000,
 			.size = 0xdf000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_ROOTSHARED,
@@ -61,14 +63,14 @@ struct {
 		{ 0 },
 		/* IVSHMEM shared memory region (virtio-con front) */
 		{
-			.phys_start = 0xfd9e0000,
-			.virt_start = 0xfd9e0000,
+			.phys_start = 0xbd9e0000,
+			.virt_start = 0xbd9e0000,
 			.size = 0x1000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
 		},
 		{
-			.phys_start = 0xfd9e1000,
-			.virt_start = 0xfd9e1000,
+			.phys_start = 0xbd9e1000,
+			.virt_start = 0xbd9e1000,
 			.size = 0xf000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_ROOTSHARED,
@@ -77,62 +79,62 @@ struct {
 		{ 0 },
 		/* IVHSMEM shared memory region for 00:00.0 (demo )*/
 		{
-			.phys_start = 0xfd9f0000,
-			.virt_start = 0xfd9f0000,
+			.phys_start = 0xbd9f0000,
+			.virt_start = 0xbd9f0000,
 			.size = 0x1000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
 		},
 		{
-			.phys_start = 0xfd9f1000,
-			.virt_start = 0xfd9f1000,
+			.phys_start = 0xbd9f1000,
+			.virt_start = 0xbd9f1000,
 			.size = 0x9000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_ROOTSHARED,
 		},
 		{
-			.phys_start = 0xfd9fa000,
-			.virt_start = 0xfd9fa000,
+			.phys_start = 0xbd9fa000,
+			.virt_start = 0xbd9fa000,
 			.size = 0x2000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
 		},
 		{
-			.phys_start = 0xfd9fc000,
-			.virt_start = 0xfd9fc000,
+			.phys_start = 0xbd9fc000,
+			.virt_start = 0xbd9fc000,
 			.size = 0x2000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
 		},
 		{
-			.phys_start = 0xfd9fe000,
-			.virt_start = 0xfd9fe000,
+			.phys_start = 0xbd9fe000,
+			.virt_start = 0xbd9fe000,
 			.size = 0x2000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_ROOTSHARED,
 		},
 		/* IVSHMEM shared memory regions for 00:01.0 (networking) */
-		JAILHOUSE_SHMEM_NET_REGIONS(0xfda00000, 1),
+		JAILHOUSE_SHMEM_NET_REGIONS(0xbda00000, 1),
 		/* UART2 earlycon */ {
-			.phys_start = 0x30890000,
-			.virt_start = 0x30890000,
-			.size = 0x1000,
-			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
-				JAILHOUSE_MEM_IO | JAILHOUSE_MEM_ROOTSHARED,
-		},
-		/* UART4 */ {
 			.phys_start = 0x30a60000,
 			.virt_start = 0x30a60000,
 			.size = 0x1000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
+				JAILHOUSE_MEM_IO | JAILHOUSE_MEM_ROOTSHARED,
+		},
+		/* UART3 */ {
+			.phys_start = 0x30880000,
+			.virt_start = 0x30880000,
+			.size = 0x1000,
+			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_IO,
 		},
-		/* SHDC3 */ {
-			.phys_start = 0x30b60000,
-			.virt_start = 0x30b60000,
+		/* SHDC2 */ {
+			.phys_start = 0x30b50000,
+			.virt_start = 0x30b50000,
 			.size = 0x10000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_IO,
 		},
 		/* RAM: Top at 4GB Space */ {
-			.phys_start = 0xfdb00000,
+			.phys_start = 0xbdb00000,
 			.virt_start = 0,
 			.size = 0x10000, /* 64KB */
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
@@ -143,9 +145,9 @@ struct {
 			 * We could not use 0x80000000 which conflicts with
 			 * COMM_REGION_BASE
 			 */
-			.phys_start = 0xc0000000,
-			.virt_start = 0xc0000000,
-			.size = 0x3d700000,
+			.phys_start = 0x82900000,
+			.virt_start = 0x82900000,
+			.size = 0x08000000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_EXECUTE | JAILHOUSE_MEM_DMA |
 				JAILHOUSE_MEM_LOADABLE,
@@ -163,7 +165,7 @@ struct {
 			.address = 0x38800000,
 			.pin_base = 32,
 			.pin_bitmap = {
-				(1 << (24 + 32 - 32)) | (1 << (29 + 32 - 32))
+				(1 << (23 + 32 - 32)) | (1 << (28 + 32 - 32))
 			},
 		},
 		/* IVSHMEM */ {
