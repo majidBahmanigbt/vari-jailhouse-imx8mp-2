@@ -18,7 +18,7 @@
 struct {
 	struct jailhouse_system header;
 	__u64 cpus[1];
-	struct jailhouse_memory mem_regions[16];
+	struct jailhouse_memory mem_regions[15];
 	struct jailhouse_irqchip irqchips[3];
 	struct jailhouse_pci_device pci_devices[2];
 } __attribute__((packed)) config = {
@@ -42,7 +42,7 @@ struct {
 			.pci_mmconfig_base = 0x7b800000,
 			.pci_mmconfig_end_bus = 0,
 			.pci_is_virtual = 1,
-			.pci_domain = 0,
+			.pci_domain = 2,
 
 			.arm = {
 				.gic_version = 3,
@@ -52,13 +52,14 @@ struct {
 			},
 		},
 		.root_cell = {
-			.name = "imx8mm",
+			.name = "imx8mp",
 
 			.num_pci_devices = ARRAY_SIZE(config.pci_devices),
 			.cpu_set_size = sizeof(config.cpus),
 			.num_memory_regions = ARRAY_SIZE(config.mem_regions),
 			.num_irqchips = ARRAY_SIZE(config.irqchips),
-			.vpci_irq_base = 123, /* Not include 32 base */
+			/* gpt5/4/3/2 not used by root cell */
+			.vpci_irq_base = 51, /* Not include 32 base */
 		},
 	},
 
@@ -116,14 +117,7 @@ struct {
 		/* Inmate memory */{
 			.phys_start = 0x6fc00000,
 			.virt_start = 0x6fc00000,
-			.size = 0x04000000,
-			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
-				JAILHOUSE_MEM_EXECUTE,
-		},
-		/* RAM 01 */ {
-			.phys_start = 0x78000000,
-			.virt_start = 0x78000000,
-			.size = 0x03700000,
+			.size = 0x3d700000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_EXECUTE,
 		},
@@ -134,17 +128,16 @@ struct {
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_EXECUTE,
 		},
-		/* RAM 02 */ {
-			.phys_start = 0x7bc00000,
-			.virt_start = 0x7bc00000,
-			.size = 0x02400000,
-			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
-				JAILHOUSE_MEM_EXECUTE,
-		},
-		/* OP-TEE reserved memory */{
+		/* OP-TEE reserved memory?? */{
 			.phys_start = 0x7e000000,
 			.virt_start = 0x7e000000,
 			.size = 0x2000000,
+			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
+		},
+		/* RAM04 */{
+			.phys_start = 0x80000000,
+			.virt_start = 0x80000000,
+			.size = 0xC0000000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE,
 		},
 	},
@@ -176,7 +169,7 @@ struct {
 	.pci_devices = {
 		{ /* IVSHMEM 0000:00:00.0 (demo) */
 			.type = JAILHOUSE_PCI_TYPE_IVSHMEM,
-			.domain = 0,
+			.domain = 2,
 			.bdf = 0 << 3,
 			.bar_mask = JAILHOUSE_IVSHMEM_BAR_MASK_INTX,
 			.shmem_regions_start = 0,
@@ -186,7 +179,7 @@ struct {
 		},
 		{ /* IVSHMEM 0000:00:01.0 (networking) */
 			.type = JAILHOUSE_PCI_TYPE_IVSHMEM,
-			.domain = 0,
+			.domain = 2,
 			.bdf = 1 << 3,
 			.bar_mask = JAILHOUSE_IVSHMEM_BAR_MASK_INTX,
 			.shmem_regions_start = 5,
