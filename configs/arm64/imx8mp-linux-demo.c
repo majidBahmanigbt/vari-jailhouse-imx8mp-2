@@ -45,14 +45,14 @@ struct {
 	.mem_regions = {
 		/* IVSHMEM shared memory region (virtio-blk front) */
 		{
-			.phys_start = 0xfd900000,
-			.virt_start = 0xfd900000,
+			.phys_start = 0xfde00000,
+			.virt_start = 0xfde00000,
 			.size = 0x1000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
 		},
 		{
-			.phys_start = 0xfd901000,
-			.virt_start = 0xfd901000,
+			.phys_start = 0xfde01000,
+			.virt_start = 0xfde01000,
 			.size = 0xdf000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_ROOTSHARED,
@@ -61,14 +61,14 @@ struct {
 		{ 0 },
 		/* IVSHMEM shared memory region (virtio-con front) */
 		{
-			.phys_start = 0xfd9e0000,
-			.virt_start = 0xfd9e0000,
+			.phys_start = 0xfdee0000,
+			.virt_start = 0xfdee0000,
 			.size = 0x1000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
 		},
 		{
-			.phys_start = 0xfd9e1000,
-			.virt_start = 0xfd9e1000,
+			.phys_start = 0xfdee1000,
+			.virt_start = 0xfdee1000,
 			.size = 0xf000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_ROOTSHARED,
@@ -77,56 +77,56 @@ struct {
 		{ 0 },
 		/* IVHSMEM shared memory region for 00:00.0 (demo )*/
 		{
-			.phys_start = 0xfd9f0000,
-			.virt_start = 0xfd9f0000,
+			.phys_start = 0xfdef0000,
+			.virt_start = 0xfdef0000,
 			.size = 0x1000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
 		},
 		{
-			.phys_start = 0xfd9f1000,
-			.virt_start = 0xfd9f1000,
+			.phys_start = 0xfdef1000,
+			.virt_start = 0xfdef1000,
 			.size = 0x9000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_ROOTSHARED,
 		},
 		{
-			.phys_start = 0xfd9fa000,
-			.virt_start = 0xfd9fa000,
+			.phys_start = 0xfdefa000,
+			.virt_start = 0xfdefa000,
 			.size = 0x2000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
 		},
 		{
-			.phys_start = 0xfd9fc000,
-			.virt_start = 0xfd9fc000,
+			.phys_start = 0xfdefc000,
+			.virt_start = 0xfdefc000,
 			.size = 0x2000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_ROOTSHARED,
 		},
 		{
-			.phys_start = 0xfd9fe000,
-			.virt_start = 0xfd9fe000,
+			.phys_start = 0xfdefe000,
+			.virt_start = 0xfdefe000,
 			.size = 0x2000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_ROOTSHARED,
 		},
 		/* IVSHMEM shared memory regions for 00:01.0 (networking) */
-		JAILHOUSE_SHMEM_NET_REGIONS(0xfda00000, 1),
+		JAILHOUSE_SHMEM_NET_REGIONS(0xfdf00000, 1),
 		/* UART2 earlycon */ {
-			.phys_start = 0x30890000,
-			.virt_start = 0x30890000,
-			.size = 0x1000,
-			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
-				JAILHOUSE_MEM_IO | JAILHOUSE_MEM_ROOTSHARED,
-		},
-		/* UART4 */ {
 			.phys_start = 0x30a60000,
 			.virt_start = 0x30a60000,
 			.size = 0x1000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
+				JAILHOUSE_MEM_IO | JAILHOUSE_MEM_ROOTSHARED,
+		},
+		/* UART3 */ {
+			.phys_start = 0x30880000,
+			.virt_start = 0x30880000,
+			.size = 0x1000,
+			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_IO,
 		},
-		/* SHDC3 */ {
-			.phys_start = 0x30b60000,
-			.virt_start = 0x30b60000,
+		/* SHDC2 */ {
+			.phys_start = 0x30b50000,
+			.virt_start = 0x30b50000,
 			.size = 0x10000,
 			.flags = JAILHOUSE_MEM_READ | JAILHOUSE_MEM_WRITE |
 				JAILHOUSE_MEM_IO,
@@ -159,11 +159,11 @@ struct {
 	},
 
 	.irqchips = {
-		/* uart2/sdhc1 */ {
+		/* uart3/sdhc2 */ {
 			.address = 0x38800000,
 			.pin_base = 32,
 			.pin_bitmap = {
-				(1 << (24 + 32 - 32)) | (1 << (29 + 32 - 32))
+				(1 << (23 + 32 - 32)) | (1 << (28 + 32 - 32))
 			},
 		},
 		/* IVSHMEM */ {
