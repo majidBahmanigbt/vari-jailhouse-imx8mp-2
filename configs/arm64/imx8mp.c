@@ -27,7 +27,7 @@ struct {
 		.revision = JAILHOUSE_CONFIG_REVISION,
 		.flags = JAILHOUSE_SYS_VIRTUAL_DEBUG_CONSOLE,
 		.hypervisor_memory = {
-			.phys_start = 0xfdc00000,
+			.phys_start = 0xfd700000,
 			.size =       0x00400000,
 		},
 		.debug_console = {
@@ -38,7 +38,7 @@ struct {
 			.type = JAILHOUSE_CON_TYPE_IMX,
 		},
 		.platform_info = {
-			.pci_mmconfig_base = 0xfd700000,
+			.pci_mmconfig_base = 0xfdc00000,
 			.pci_mmconfig_end_bus = 0,
 			.pci_is_virtual = 1,
 			.pci_domain = 2,
