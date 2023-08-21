@@ -20,7 +20,7 @@ struct {
 	__u64 cpus[1];
 	struct jailhouse_memory mem_regions[24];
 	struct jailhouse_irqchip irqchips[3];
-	struct jailhouse_pci_device pci_devices[4];
+	struct jailhouse_pci_device pci_devices[2];
 } __attribute__((packed)) config = {
 	.header = {
 		.signature = JAILHOUSE_SYSTEM_SIGNATURE,
@@ -203,34 +203,12 @@ struct {
 	},
 
 	.pci_devices = {
-		{
-			.type = JAILHOUSE_PCI_TYPE_IVSHMEM,
-			.domain = 2,
-			.bdf = 2 << 3,
-			.bar_mask = JAILHOUSE_IVSHMEM_BAR_MASK_INTX,
-			.shmem_regions_start = 0,
-			.shmem_dev_id = 0,
-			.shmem_peers = 2,
-			.shmem_protocol = JAILHOUSE_SHMEM_PROTO_VIRTIO_BACK +
-				VIRTIO_DEV_BLOCK,
-		},
-		{
-			.type = JAILHOUSE_PCI_TYPE_IVSHMEM,
-			.domain = 2,
-			.bdf = 3 << 3,
-			.bar_mask = JAILHOUSE_IVSHMEM_BAR_MASK_INTX,
-			.shmem_regions_start = 4,
-			.shmem_dev_id = 0,
-			.shmem_peers = 2,
-			.shmem_protocol = JAILHOUSE_SHMEM_PROTO_VIRTIO_BACK +
-				VIRTIO_DEV_CONSOLE,
-		},
 		{ /* IVSHMEM 0000:00:00.0 (demo) */
 			.type = JAILHOUSE_PCI_TYPE_IVSHMEM,
 			.domain = 2,
 			.bdf = 0 << 3,
 			.bar_mask = JAILHOUSE_IVSHMEM_BAR_MASK_INTX,
-			.shmem_regions_start = 8,
+			.shmem_regions_start = 0,
 			.shmem_dev_id = 0,
 			.shmem_peers = 3,
 			.shmem_protocol = JAILHOUSE_SHMEM_PROTO_UNDEFINED,
@@ -240,7 +218,7 @@ struct {
 			.domain = 2,
 			.bdf = 1 << 3,
 			.bar_mask = JAILHOUSE_IVSHMEM_BAR_MASK_INTX,
-			.shmem_regions_start = 13,
+			.shmem_regions_start = 5,
 			.shmem_dev_id = 0,
 			.shmem_peers = 2,
 			.shmem_protocol = JAILHOUSE_SHMEM_PROTO_VETH,
